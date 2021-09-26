@@ -1,2 +1,6 @@
 publish.sh
 node_modules
+dist
+data
+build
+.DS_Store

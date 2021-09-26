@@ -1,3 +1,12 @@
 appId: com.bmxclubby.racers
 publish:
   provider: github
+files:
+  - ./build/**/*
+  - ./server/**/*
+  - ./migrations/**/*
+  - ./node_modules/**/*
+  - ./public/electron.js
+
+directories:
+  buildResources: assets

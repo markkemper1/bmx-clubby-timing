@@ -1,5 +1,9 @@
 const { app, BrowserWindow, ipcMain } = require("electron");
 const { autoUpdater } = require("electron-updater");
+const isDev = require("electron-is-dev");
+const path = require("path");
+process.env.DATA_DIR = app.getPath("userData");
+const server = require("../server");
 
 let mainWindow;
 
@@ -8,11 +12,26 @@ function createWindow() {
     width: 800,
     height: 600,
     webPreferences: {
-      nodeIntegration: true
-    }
+      nodeIntegration: false, // is default value after Electron v5
+      contextIsolation: true, // protect against prototype pollution
+      enableRemoteModule: false, // turn off remote
+      preload: path.join(__dirname, "preload.js"), // use a preload script
+    },
   });
-  mainWindow.loadFile("index.html");
-  mainWindow.on("closed", function() {
+
+  const startUrl = "http://localhost:8999";
+  (async function () {
+    await server;
+    mainWindow.loadURL(startUrl);
+    mainWindow.maximize();
+  })();
+
+  // Open the DevTools.
+  if (isDev && false) {
+    mainWindow.webContents.openDevTools({ mode: "detach" });
+  }
+
+  mainWindow.on("closed", function () {
     mainWindow = null;
   });
 
@@ -25,19 +44,19 @@ app.on("ready", () => {
   createWindow();
 });
 
-app.on("window-all-closed", function() {
+app.on("window-all-closed", function () {
   if (process.platform !== "darwin") {
     app.quit();
   }
 });
 
-app.on("activate", function() {
+app.on("activate", function () {
   if (mainWindow === null) {
     createWindow();
   }
 });
 
-ipcMain.on("app_version", event => {
+ipcMain.on("app_version", (event) => {
   event.sender.send("app_version", { version: app.getVersion() });
 });
 
@@ -47,6 +66,7 @@ autoUpdater.on("update-available", () => {
 autoUpdater.on("update-downloaded", () => {
   mainWindow.webContents.send("update_downloaded");
 });
+
 ipcMain.on("restart_app", () => {
   autoUpdater.quitAndInstall();
 });
