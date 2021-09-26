@@ -4,3 +4,4 @@ dist
 data
 build
 .DS_Store
+deploy.sh
