@@ -1,8 +1,9 @@
+BMX Clubby Timing 
+
+A simple timing application for BMX tracks.
 
 
-Release 1. 
-
-* Can setup and connect to the decoder
-* Reads and stores all decoder messages for debugging.
-* Serves Gates pratice app.
-* Auto Updates.
+Release 1
+* Connects to a decoder
+* Timing page
+* Auto Updating
