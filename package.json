@@ -1,6 +1,6 @@
 {
   "name": "bmx-clubby-timing",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "repository": {
     "type": "git",
     "url": "git@github.com:markkemper1/bmx-clubby-timing.git"
@@ -58,6 +58,7 @@
     "eject": "craco eject",
     "start:electron": "wait-on tcp:3000 && electron .",
     "build:electron": "electron-builder build --win --publish never",
+    "predeploy": "npm run build",
     "deploy": "electron-builder build --mac --win --publish always"
   },
   "eslintConfig": {
