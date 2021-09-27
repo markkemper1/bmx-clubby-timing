@@ -60,8 +60,8 @@
     "start:electron": "wait-on tcp:3000 && electron .",
     "build:electron": "npm run build -s && electron-builder build --win --publish never",
     "build:win": "npm run build -s && electron-builder build --win --publish never",
-    "predeploy": "npm run build",
-    "deploy": "electron-builder build --mac --win --publish always"
+    "deploy": "npm run build && electron-builder build --mac --win --publish always",
+    "deploy:win": "npm run build && electron-builder build --win --publish always"
   },
   "eslintConfig": {
     "extends": [
