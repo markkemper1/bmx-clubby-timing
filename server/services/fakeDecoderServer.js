@@ -73,6 +73,6 @@ function Faker(onTrackEventHandler) {
       onTrackEventHandler(startHillEvent);
       delete trackEvents[passing.transponder];
     }
-  }, Math.random() * 1000);
+  }, 500 + (Math.random() * 1000));
   return {};
 }

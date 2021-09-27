@@ -1,4 +1,4 @@
-const log = require("pino")({ name: "TrackRiders", level: process.env.LOG_LEVEL || "info", base: null });
+const log = console;
 
 module.exports = function ({ track }) {
   if (!track) throw new Error("Track option must be supplied");

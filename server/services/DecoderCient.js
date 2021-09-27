@@ -1,5 +1,5 @@
 const net = require("net");
-const log = require("pino")({ name: "Decoder", level: process.env.LOG_LEVEL || "info", base: null });
+const log = console;
 
 module.exports = function DecoderCient({ ip, port = 5403 }) {
   const socket = new net.Socket();

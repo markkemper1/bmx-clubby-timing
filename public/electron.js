@@ -1,3 +1,8 @@
+const log = require('electron-log');
+log.transports.file.level = 'info'
+log.transports.file.level = 'info'
+Object.assign(console, log.functions);
+
 const { app, BrowserWindow, ipcMain } = require("electron");
 const { autoUpdater } = require("electron-updater");
 const isDev = require("electron-is-dev");
@@ -21,7 +26,7 @@ function createWindow() {
 
   const startUrl = "http://localhost:8999";
   (async function () {
-    await server;
+    await server.start();
     mainWindow.loadURL(startUrl);
     mainWindow.maximize();
   })();
@@ -31,8 +36,9 @@ function createWindow() {
     mainWindow.webContents.openDevTools({ mode: "detach" });
   }
 
-  mainWindow.on("closed", function () {
+  mainWindow.on("closed", async function () {
     mainWindow = null;
+    await server.close();
   });
 
   mainWindow.once("ready-to-show", () => {

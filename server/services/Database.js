@@ -8,7 +8,7 @@ async function createDatabase() {
   const dbPath = process.env.DATA_DIR || path.join(process.cwd(), "./data");
   const dbFilename = path.join(dbPath, "./bmx-clubby-timing.sqlite");
   console.log(dbFilename);
-  if (fs.existsSync(dbFilename)) fs.rmSync(dbFilename);
+  if(!fs.existsSync(dbPath)) fs.mkdirSync(dbPath)
   await new Promise((resolve, reject) => {
     new sqlite3.Database(dbFilename, sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE, (err) => (err ? reject(err) : resolve()));
   });

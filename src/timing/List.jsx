@@ -32,8 +32,9 @@ export const List = () => {
   }
 
   useEffect(() => {
+    if(client.readyState === 1) client.send(JSON.stringify({ type: "timings" }))
     client.onopen = () => {
-      console.log("WebSocket Client Connected");
+      client.send(JSON.stringify({ type: "timings" }))
     };
     client.onmessage = (raw) => {
       const message = JSON.parse(raw.data);
@@ -81,7 +82,7 @@ export const List = () => {
                 Start Hill
               </TableCell>
               <TableCell variant="head" align="right">
-                Lap Time {transponder}
+                Lap Time
               </TableCell>
             </TableRow>
           </TableHead>

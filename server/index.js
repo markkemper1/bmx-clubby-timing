@@ -27,6 +27,7 @@ function createServer(services) {
     errors.errors = errors;
     return error;
   });
+
   fastify.setErrorHandler(function (error, request, reply) {
     if (error.validation) {
       console.log(error.validation);
@@ -47,7 +48,20 @@ function createServer(services) {
 
   fastify.register(require("./TrackRouter"), { prefix: "/api/tracks" });
 
-  fastify.get("/ws", { websocket: true }, (connection, request) => {});
+  async function sendTimings(clients) {
+    const latest = await services.db.getTimings();
+    const message = JSON.stringify({ type: "timings", data: latest });
+    for (let client of clients) {
+      client.send(message);
+    }
+  }
+
+  fastify.get("/ws", { websocket: true }, async (connection, request) => {
+    sendTimings(new Set().add(connection.socket))
+    connection.socket.on('message', message => {
+      sendTimings(new Set().add(connection.socket))
+    })
+  });
 
   fastify.setNotFoundHandler(function (request, reply) {
     reply.status(200);
@@ -56,28 +70,37 @@ function createServer(services) {
 
   if (services.db) {
     services.db.onTiming(async (t) => {
-      const latest = await services.db.getTimings();
-      for (let client of fastify.websocketServer.clients) {
-        client.send(JSON.stringify({ type: "timings", data: latest }));
-      }
+      sendTimings(fastify.websocketServer.clients)
     });
   }
-
-  fastify.decoder.connect().catch((e) => {});
 
   return fastify;
 }
 
 // Run the server!
-const start = async () => {
+const start = async ({ port = 8999 } = {}) => {
   try {
     const services = await Services.init();
     const fastify = createServer(services);
     await fastify.ready();
-    return new Promise((resolve) => fastify.listen(8999, resolve));
+    await new Promise((resolve) => fastify.listen(port, resolve));
+    return fastify;
   } catch (err) {
     console.error(err);
     process.exit(1);
   }
 };
-module.exports = start();
+
+module.exports = (function () {
+  let fastify;
+  return {
+    start: async (args) => {
+      fastify = await start(args)
+    },
+    close() { return fastify.close() }
+  }
+})()
+
+if (module == require.main) {
+  start()
+}
