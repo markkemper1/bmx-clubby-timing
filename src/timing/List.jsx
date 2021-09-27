@@ -32,7 +32,7 @@ export const List = () => {
   }
 
   useEffect(() => {
-    if(client.readyState === 1) client.send(JSON.stringify({ type: "timings" }))
+    if (client.readyState === 1) client.send(JSON.stringify({ type: "timings" }))
     client.onopen = () => {
       client.send(JSON.stringify({ type: "timings" }))
     };
@@ -42,7 +42,8 @@ export const List = () => {
         setTimes(message.data.map(mapTiming));
       }
     };
-  });
+  }, []);
+  
   return (
     <Layout title="Timing">
       <TextField

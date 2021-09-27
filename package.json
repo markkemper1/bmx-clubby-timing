@@ -1,6 +1,6 @@
 {
   "name": "bmx-clubby-timing",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "repository": {
     "type": "git",
     "url": "git@github.com:markkemper1/bmx-clubby-timing.git"
@@ -53,12 +53,10 @@
     "start:server": "nodemon server",
     "start": "concurrently -k \"npm run start:react\" \"npm run start:electron\" \"npm run start:server\" ",
     "startweb": "concurrently -k \"npm run start:react\" \"npm run start:server\" ",
-    "electron": "electron .",
+    "electron": "npm run build && electron .",
     "build": "craco build",
     "test": "craco test",
     "eject": "craco eject",
-    "start:electron": "wait-on tcp:3000 && electron .",
-    "build:electron": "npm run build -s && electron-builder build --win --publish never",
     "build:win": "npm run build -s && electron-builder build --win --publish never",
     "deploy": "npm run build && electron-builder build --mac --win --publish always",
     "deploy:win": "npm run build && electron-builder build --win --publish always"
