@@ -32,7 +32,7 @@ jobs:
           project: bmx-clubby-desktop
       - run: |
           node -e "console.log('VERSION=' + require('./package.json').version)"
-          node -e "console.log('VERSION=' + require('./package.json').version)" >> $GITHUB_ENV
+          node -e "console.log('VERSION=' + require('./package.json').version)" >> $env:GITHUB_ENV
       - run: echo "${{ env.VERSION }}"
       - run: npm ci
       - run: npm run deploy:win
