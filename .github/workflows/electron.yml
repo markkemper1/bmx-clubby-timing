@@ -25,7 +25,6 @@ jobs:
         cache: 'npm'
         with:
           node-version: ${{ matrix.node-version }}
-          cache: "npm"
 
       - name: Install Sentry CLi
         uses: mathieu-bour/setup-sentry-cli@1.2.0
