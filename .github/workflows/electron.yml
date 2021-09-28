@@ -29,7 +29,7 @@ jobs:
       - name: Install Sentry CLi
         uses: mathieu-bour/setup-sentry-cli@1.2.0
         with:
-          token: ${{ SECRETS.SENTRY_AUTH_TOKEN }}
+          token: ${{ secrets.SENTRY_AUTH_TOKEN }}
           organization: mark-kemper
           project: bmx-clubby-desktop
 
@@ -41,7 +41,7 @@ jobs:
       - run: npm run deploy:win
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          
+
       - name: Deploy Sentry release
         run: |
           sentry-cli releases new "${{ env.VERSION }}"
