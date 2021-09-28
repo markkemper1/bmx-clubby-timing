@@ -1,8 +1,11 @@
 const log = require('electron-log');
+const packageJson = require('../package.json')
 log.transports.file.level = 'info'
 log.transports.file.level = 'info'
 Object.assign(console, log.functions);
 
+const Sentry = require("@sentry/node");
+var os = require("os");
 const { app, BrowserWindow, ipcMain } = require("electron");
 const { autoUpdater } = require("electron-updater");
 const isDev = require("electron-is-dev");
@@ -11,6 +14,31 @@ process.env.DATA_DIR = app.getPath("userData");
 const server = require("../server");
 
 let mainWindow;
+Sentry.init({
+  serverName: os.hostname(),
+  environment: isDev ? 'dev' : 'production',
+  initialScope: {
+    user: {
+      name: `${os.userInfo().username}@${os.hostname()}`
+    },
+    tags: {
+      arch: os.arch(),
+      platform: os.platform(),
+      type: os.type(),
+    }
+  },
+  release: `${packageJson.name}@${packageJson.version}${isDev ? '-dev' : ''}`,
+  dsn: "https://30dca3c2643e4891b1af4f454fcb9d53@o1017083.ingest.sentry.io/5982657"
+});
+Sentry.setContext("OS", {
+  arch: os.arch(),
+  freemem: os.freemem(),
+  platform: os.platform(),
+  totalmem: os.totalmem(),
+  type: os.type(),
+  uptime: os.uptime(),
+  version: os.version(),
+});
 
 function createWindow() {
   mainWindow = new BrowserWindow({

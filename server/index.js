@@ -3,6 +3,7 @@ const Fastify = require("fastify");
 const fastifyWebsocket = require("fastify-websocket");
 const fastifyStatic = require("fastify-static");
 const path = require("path");
+const Sentry = require("@sentry/node");
 
 const buildDir = path.join(__dirname, "../build");
 
@@ -35,6 +36,7 @@ function createServer(services) {
         errors: error.validation.map((x) => x.message),
       });
     } else {
+      Sentry.captureException(error);
       console.log(error);
       reply.status(500).send("Server Error");
     }

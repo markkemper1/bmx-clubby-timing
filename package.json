@@ -11,6 +11,8 @@
   "main": "public/electron.js",
   "private": true,
   "dependencies": {
+    "@sentry/node": "^6.13.2",
+    "@sentry/tracing": "^6.13.2",
     "ajv": "^6.12.6",
     "ajv-errors": "^1.0.1",
     "electron-is-dev": "^2.0.0",
@@ -58,7 +60,7 @@
     "test": "craco test",
     "eject": "craco eject",
     "build:win": "npm run build -s && electron-builder build --win --publish never",
-    "deploy": "npm run build && electron-builder build --mac --win --publish always",
+    "build:mac": "npm run build -s && electron-builder build --mac --publish never",
     "deploy:win": "npm run build && electron-builder build --win --publish always"
   },
   "eslintConfig": {

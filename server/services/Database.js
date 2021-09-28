@@ -8,7 +8,7 @@ async function createDatabase() {
   const dbPath = process.env.DATA_DIR || path.join(process.cwd(), "./data");
   const dbFilename = path.join(dbPath, "./bmx-clubby-timing.sqlite");
   console.log(dbFilename);
-  if(!fs.existsSync(dbPath)) fs.mkdirSync(dbPath)
+  if (!fs.existsSync(dbPath)) fs.mkdirSync(dbPath)
   await new Promise((resolve, reject) => {
     new sqlite3.Database(dbFilename, sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE, (err) => (err ? reject(err) : resolve()));
   });
@@ -103,7 +103,7 @@ module.exports = async () => {
     async decoderUpsert({ id, ip, port }) {
       const dbRow = { id: 1, ip, port };
       console.log(dbRow);
-      return await decoders().update(dbRow).onConflict(["id"]).merge();
+      return await decoders().insert(dbRow).onConflict(["id"]).merge();
     },
 
     onTiming(handler) {

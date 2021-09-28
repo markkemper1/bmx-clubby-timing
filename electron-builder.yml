@@ -2,6 +2,7 @@ appId: com.bmxclubby.racers
 publish:
   provider: github
 files:
+  - ./package.json
   - ./build/**/*
   - ./server/**/*
   - ./migrations/**/*
