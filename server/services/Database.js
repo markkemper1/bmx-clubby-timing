@@ -74,7 +74,7 @@ module.exports = async () => {
       );
     },
     async tracksUpsert({ id, name, gateTransponderCode, loops }) {
-      const dbRow = { name, gateTransponderCode, loops: JSON.stringify(loops) };
+      const dbRow = {id: "1", name, gateTransponderCode, loops: JSON.stringify(loops) };
       return await tracks().insert(dbRow).onConflict("id").merge();
     },
 

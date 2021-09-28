@@ -19,7 +19,7 @@ export function TrackEdit() {
   function onSubmit(values) {
     return post(values)
       .then((r) => {
-        history.push("/gates");
+        history.push("/settings");
         return r;
       })
       .catch((e) => {
