@@ -30,7 +30,9 @@ jobs:
           token: ${{ SECRETS.SENTRY_AUTH_TOKEN }}
           organization: mark-kemper
           project: bmx-clubby-desktop
-      - run: node -e "console.log('VERSION=' + require('./package.json').version)" >> $GITHUB_ENV
+      - run: |
+          node -e "console.log('VERSION=' + require('./package.json').version)"
+          node -e "console.log('VERSION=' + require('./package.json').version)" >> $GITHUB_ENV
       - run: echo "${{ env.VERSION }}"
       - run: npm ci
       - run: npm run deploy:win
