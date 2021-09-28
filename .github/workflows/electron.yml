@@ -19,25 +19,29 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
+
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v2
         with:
           node-version: ${{ matrix.node-version }}
           cache: "npm"
+
       - name: Install Sentry CLi
         uses: mathieu-bour/setup-sentry-cli@1.2.0
         with:
           token: ${{ SECRETS.SENTRY_AUTH_TOKEN }}
           organization: mark-kemper
           project: bmx-clubby-desktop
-      - run: |
-          node -e "console.log('VERSION=' + require('./package.json').version)"
-          node -e "console.log('VERSION=' + require('./package.json').version)" >> $env:GITHUB_ENV
-      - run: echo "${{ env.VERSION }}"
+
+      - name: Setup Version environment variable
+        run: node -e "console.log('VERSION=' + require('./package.json').version)" >> $env:GITHUB_ENV
+
       - run: npm ci
+
       - run: npm run deploy:win
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          
       - name: Deploy Sentry release
         run: |
           sentry-cli releases new "${{ env.VERSION }}"
