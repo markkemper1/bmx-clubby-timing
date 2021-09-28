@@ -22,6 +22,7 @@ jobs:
 
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v2
+        cache: 'npm'
         with:
           node-version: ${{ matrix.node-version }}
           cache: "npm"
