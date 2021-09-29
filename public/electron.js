@@ -5,7 +5,7 @@ log.transports.file.level = 'info'
 Object.assign(console, log.functions);
 
 const Sentry = require("@sentry/node");
-var os = require("os");
+const os = require("os");
 const { app, BrowserWindow, ipcMain } = require("electron");
 const { autoUpdater } = require("electron-updater");
 const isDev = require("electron-is-dev");
@@ -14,7 +14,7 @@ process.env.DATA_DIR = app.getPath("userData");
 const server = require("../server");
 
 let mainWindow;
-Sentry.init({
+const sentryOptions = {
   serverName: os.hostname(),
   environment: isDev ? 'dev' : 'production',
   initialScope: {
@@ -28,9 +28,14 @@ Sentry.init({
     }
   },
   release: `${packageJson.name}@${packageJson.version}${isDev ? '-dev' : ''}`,
+};
+
+Sentry.init({
+  ...sentryOptions,
   dsn: "https://30dca3c2643e4891b1af4f454fcb9d53@o1017083.ingest.sentry.io/5982657"
 });
-Sentry.setContext("OS", {
+
+const sentryOSContext = {
   arch: os.arch(),
   freemem: os.freemem(),
   platform: os.platform(),
@@ -38,7 +43,9 @@ Sentry.setContext("OS", {
   type: os.type(),
   uptime: os.uptime(),
   version: os.version(),
-});
+};
+
+Sentry.setContext("OS", sentryOSContext);
 
 function createWindow() {
   mainWindow = new BrowserWindow({
@@ -92,6 +99,11 @@ app.on("activate", function () {
 
 ipcMain.on("app_version", (event) => {
   event.sender.send("app_version", { version: app.getVersion() });
+});
+
+ipcMain.on("sentry_init", (event) => {
+  event.sender.send("sentry_init", sentryOptions);
+  event.sender.send("sentry_set_context", "OS", sentryOSContext);
 });
 
 autoUpdater.on("update-available", () => {

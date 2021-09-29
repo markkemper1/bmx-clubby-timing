@@ -7,11 +7,11 @@ const { contextBridge, ipcRenderer } = require("electron");
 //   saveDataFile: x => ipcRenderer.invoke("saveDataFile", x)
 // });
 
-let validListenChannels = ["app_version", "update_available", "update_downloaded"];
+let validListenChannels = ["app_version", "update_available", "update_downloaded", "sentry_init", "sentry_set_context"];
 contextBridge.exposeInMainWorld("api", {
   send: (channel, data) => {
     // whitelist channels
-    let validChannels = ["app_version", "restart_app"];
+    let validChannels = ["app_version", "restart_app", "sentry_init"];
     if (validChannels.includes(channel)) {
       ipcRenderer.send(channel, data);
     }

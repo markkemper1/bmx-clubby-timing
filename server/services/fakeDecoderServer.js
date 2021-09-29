@@ -7,19 +7,19 @@ const faker = Faker((f) => {
     writer(
       f.transponder == "00-09992"
         ? {
-            type: "PASSING",
-            fields: {
-              TRANSPONDER: 9992,
-              RTC_TIME: new Date().getTime(),
-            },
-          }
+          type: "PASSING",
+          fields: {
+            TRANSPONDER: 9992,
+            RTC_TIME: new Date().getTime(),
+          },
+        }
         : {
-            type: "PASSING",
-            fields: {
-              TRAN_CODE: f.transponder,
-              RTC_TIME: new Date().getTime(),
-            },
-          }
+          type: "PASSING",
+          fields: {
+            TRAN_CODE: f.transponder,
+            RTC_TIME: new Date().getTime(),
+          },
+        }
     )
   );
 });
