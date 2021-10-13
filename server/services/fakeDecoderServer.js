@@ -1,30 +1,29 @@
-const FakeDecoder = require("./decoding/FakeDecoder");
-const writer = require("./decoding/writer");
-const server = FakeDecoder();
+const { CreateFakeDecoder, write } = require("bmx-clubby-decoder");
+const server = CreateFakeDecoder();
 
-const faker = Faker((f) => {
+startFaking((f) => {
   server.send(
-    writer(
+    write(
       f.transponder == "00-09992"
         ? {
-          type: "PASSING",
-          fields: {
-            TRANSPONDER: 9992,
-            RTC_TIME: new Date().getTime(),
-          },
-        }
+            type: "PASSING",
+            fields: {
+              TRANSPONDER: 9992,
+              RTC_TIME: new Date().getTime(),
+            },
+          }
         : {
-          type: "PASSING",
-          fields: {
-            TRAN_CODE: f.transponder,
-            RTC_TIME: new Date().getTime(),
-          },
-        }
+            type: "PASSING",
+            fields: {
+              TRAN_CODE: f.transponder,
+              RTC_TIME: new Date().getTime(),
+            },
+          }
     )
   );
 });
 
-function Faker(onTrackEventHandler) {
+function startFaking(onTrackEventHandler) {
   let id = 1;
   let gateDrop = null;
   const trackEvents = {};
@@ -73,6 +72,6 @@ function Faker(onTrackEventHandler) {
       onTrackEventHandler(startHillEvent);
       delete trackEvents[passing.transponder];
     }
-  }, 500 + (Math.random() * 1000));
+  }, 500 + Math.random() * 1000);
   return {};
 }

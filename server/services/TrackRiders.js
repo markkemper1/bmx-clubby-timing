@@ -7,6 +7,7 @@ module.exports = function ({ track }) {
 
   let lastGate;
   const riders = {};
+
   const firstLoop = track.loops[0];
 
   function formatResult(transponder, rider, delta) {

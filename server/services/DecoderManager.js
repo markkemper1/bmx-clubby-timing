@@ -1,4 +1,4 @@
-const { parse } = require("./decoding");
+const { parse } = require("bmx-clubby-decoder");
 const EventEmitter = require("events");
 
 module.exports = function DecoderManager({ db, Decoder }) {
@@ -40,9 +40,9 @@ module.exports = function DecoderManager({ db, Decoder }) {
   }
 
   async function connectInternal() {
-    if (decoder){
+    if (decoder) {
       await decoder.destroy();
-    } 
+    }
     console.log("Connecting", settings);
     decoder = new Decoder(settings);
     decoder.onClose(onClose);
@@ -71,7 +71,7 @@ module.exports = function DecoderManager({ db, Decoder }) {
       return { isConnected, error, settings };
     },
     async setSettings({ ip, port }) {
-      const changed = settings && ( ip != settings.ip || port != settings.port);
+      const changed = settings && (ip != settings.ip || port != settings.port);
       console.log("ip", ip, "port", port);
       await db.decoderUpsert({ id: "1", ip, port: parseInt(port) });
       if (changed) {
